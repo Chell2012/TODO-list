@@ -16,23 +16,15 @@
 </head>
 <body>
 <div class="container align-self-center">
-    <div class="header-style-1 row mt-3">
+    <div class="header-style-1 row">
         <div class="col-md-1">
             <a href="/">
                 <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
             </a>
         </div>
-        <div class="col-md-9"></div>
-        <div class="col-md-2">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <x-primary-button class="btn btn-secondary btn-sm active">
-                    {{ __('Log Out') }}
-                </x-primary-button>
-            </form>
-        </div>
     </div>
 </div>
+
 <div class="container-sm align-self-center">
     {{ $slot }}
 </div>

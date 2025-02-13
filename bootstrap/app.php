@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ApiTokenMiddleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,31 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'auth.api' => ApiTokenMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->renderable(function (Throwable $e, $request) {
-            if ($request->is('api/*')) {
-                if ($e instanceof ValidationException) {
-                    return response()->json([
-                        'error' => 'Ошибка валидации',
-                        'messages' => $e->errors(),
-                    ], 422);
-                }
-
-                if ($e instanceof AuthenticationException) {
-                    return response()->json(['error' => 'Неавторизованный доступ'], 401);
-                }
-
-                if ($e instanceof NotFoundHttpException) {
-                    return response()->json(['error' => 'Маршрут не найден'], 404);
-                }
-
-                return response()->json([
-                    'error' => 'Внутренняя ошибка сервера',
-                    'message' => $e->getMessage(),
-                ], 500);
-            }
-            return null;
-        });
     })->create();
