@@ -23,6 +23,7 @@ function addTag(tagText) {
     tag.classList.add("tag");
     tag.textContent = tagText;
 
+
     const removeButton = document.createElement("button");
     removeButton.textContent = "×";
     removeButton.onclick = function() {

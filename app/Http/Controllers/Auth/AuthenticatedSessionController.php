@@ -27,7 +27,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         if ($request->expectsJson()){
-            return $request->user()->api_token;
+            return  response()->json($request->user()->api_token);
         }
         $request->session()->regenerate();
 
