@@ -7,33 +7,26 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-const tagContainer = document.getElementById("tagContainer");
-const tagInput = document.getElementById("tagInput");
-
-tagInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter" && tagInput.value.trim() !== "") {
-        event.preventDefault();
-        addTag(tagInput.value.trim());
-        tagInput.value = "";
-    }
-});
-
-function addTag(tagText) {
+function addTag(element,tagInput) {
     const tag = document.createElement("div");
     tag.classList.add("tag");
-    tag.textContent = tagText;
+    tag.textContent = tagInput.value;
+
+    const tagHiddenInput = document.createElement("input");
+    tagHiddenInput.name = "tag[]";
+    tagHiddenInput.value = tagInput.value || "";
+    tagHiddenInput.type = "hidden";
+
 
 
     const removeButton = document.createElement("button");
     removeButton.textContent = "×";
     removeButton.onclick = function() {
-        tagContainer.removeChild(tag);
+        element.parent.removeChild(tag);
     };
 
     tag.appendChild(removeButton);
-    tagContainer.insertBefore(tag, tagInput);
+    tag.appendChild(tagHiddenInput);
+    element.append(tag, tagInput);
 }
 
-function focusInput() {
-    tagInput.focus();
-}
