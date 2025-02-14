@@ -36,5 +36,34 @@
 <div class="container-sm align-self-center">
     {{ $slot }}
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#task-form").submit(function(event) {
+            event.preventDefault();
+
+            let form = $(this);
+            let url = form.attr("action");
+            let method = "PUT";
+            let formData = form.serialize();
+
+            $.ajax({
+                url: url,
+                type: method,
+                data: formData,
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Ошибка:", error);
+                    $("#response").text("Ошибка отправки данных");
+                }
+            });
+            return false;
+        });
+    });
+</script>
 </body>
 </html>

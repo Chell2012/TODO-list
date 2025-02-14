@@ -5,31 +5,45 @@
         </h2>
     </x-slot>
 
-    <form class="input-group mb-3" method="POST" action="{{ route("dashboard.store") }}">
+    <form class="input-group mb-3" method="POST" action="{{ route("dashboard.store") }}" id="add-task">
+        @csrf
         <div class="container">
             <div class="row">
                 <div class="col-md-2">
                     <x-text-input id="title" class="form-control"
                                   name="title"
+                                  placeholder="Title"
                                   required/>
                 </div>
                 <div class="col-md-10">
-                    <div class="tag-container" id="tagContainer" >
-                        <input type="text" class="tag-input form-control" id="tagInput" placeholder="New tag">
-                        <button class="btn btn-secondary btn-sm active" onclick="addTag(this, this.parent.getElementById('tagInput'))">Add</button>
-                    </div>
+                    <x-text-input id="title" class="form-control"
+                                  name="tags_string"
+                                  placeholder="Tags"
+                                  required/>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <x-textarea-input id="text" class="form-control" name="text"/>
+                    <x-textarea-input placeholder="Text"
+                                      id="text"
+                                      class="form-control"
+                                      name="text"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <x-primary-button class="btn btn-secondary btn-md active d-block ">
+                        Add Task
+                    </x-primary-button>
                 </div>
             </div>
         </div>
     </form>
 
-    @foreach($tasks as $task)
-        <form class="input-group mb-3" method="PUT" action="{{ route("dashboard.update", $task->id) }}">
+    @foreach($tasks as $task )
+        <form class="input-group mb-3" method="POST" action='{{ route("dashboard.update", $task->id) }}' id="task-form">
+            @csrf
+            <input type="hidden" name="_method" value="PUT">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
@@ -38,23 +52,30 @@
                                       value="{{ $task->title }}"
                                       required/>
                     </div>
-                    <div class="col-md-10">
-                        <div class="tag-container" id="tagContainer" >
-                            <input type="text" class="tag-input form-control" id="tagInput" placeholder="New tag">
-                            @foreach($task->tags()->get() as $tag)
-                                <div class="tag">
-                                    {{ $tag['title'] }}
-                                    <button onclick="this.parentElement.remove()">×</button>
-                                    <input name="tag[]" type="hidden" value="{{ $tag['title'] }}">
-                                </div>
-                            @endforeach
-                            <button class="btn btn-secondary btn-sm active" type="button" onclick="addTag(this, this.parent.getElementById('tagInput'))">Add</button>
-                        </div>
+
+                    <div class="col-md-8">
+                        <x-text-input id="tags" class="form-control"
+                                      name="tags_string"
+                                      value="{{ implode(' ', array_column($task->tags()->get()->toArray(), 'title')) }}"
+                                      required/>
                     </div>
+                    <div class="col-md-1">
+                        <x-primary-button class="btn btn-warning btn-md active d-block" type="submit">
+                            Edit
+                        </x-primary-button>
+                    </div>
+                    <div class="col-md-1">
+                        <x-primary-button class="btn btn-danger btn-md active d-block" type="button">
+                            X
+                        </x-primary-button>
+                    </div>
+
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <x-textarea-input id="text" class="form-control" name="text">
+                        <x-textarea-input id="text"
+                                          class="form-control"
+                                          name="text">
                             {{ $task->text }}
                         </x-textarea-input>
                     </div>
@@ -62,5 +83,4 @@
             </div>
         </form>
     @endforeach
-
 </x-app-layout>

@@ -7,26 +7,17 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-function addTag(element,tagInput) {
-    const tag = document.createElement("div");
-    tag.classList.add("tag");
-    tag.textContent = tagInput.value;
+function addTask (url){
+    let template = document.querySelector("#add-task");
+    let clone = template.cloneNode(true);
+    fetch(url, {
+        method: "PUT", // Указываем метод запроса
 
-    const tagHiddenInput = document.createElement("input");
-    tagHiddenInput.name = "tag[]";
-    tagHiddenInput.value = tagInput.value || "";
-    tagHiddenInput.type = "hidden";
-
-
-
-    const removeButton = document.createElement("button");
-    removeButton.textContent = "×";
-    removeButton.onclick = function() {
-        element.parent.removeChild(tag);
-    };
-
-    tag.appendChild(removeButton);
-    tag.appendChild(tagHiddenInput);
-    element.append(tag, tagInput);
+        body: JSON.stringify({ html: htmlContent })
+    })
+        .then(response => response.json())
+        .then(data => console.log("Ответ сервера:", data))
+        .catch(error => console.error("Ошибка:", error));
+    document.body.appendChild(clone);
 }
 

@@ -27,7 +27,8 @@ class TaskRequest extends FormRequest
             'title' => 'required|string|min:3|max:20',
             'text' => 'nullable|string|max:200',
             'tags' => 'array',
-            'tags.*' => 'string|max:20'
+            'tags.*' => 'string|max:20',
+            'tags_string'=> 'string'
         ];
     }
 }
