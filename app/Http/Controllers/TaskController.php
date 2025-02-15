@@ -16,7 +16,9 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $tasks = Task::with('tags')->get();
+        $user = isset($request->user()->id) ? $request->user() : null;
+        if (isset($request->api_token)) $user = User::where('api_token', $request->api_token)->first()->id;
+        $tasks = Task::with('tags')->where('user_id', $user->id)->get();
         return $request->expectsJson() ?
             response()->json($tasks) :
             response()->view('dashboard', ['tasks' => $tasks]);
@@ -79,6 +81,7 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, string $id)
     {
+
         $task = Task::find($id);
         if ($request->user()->id == $task->user_id) {
             $tags = [];

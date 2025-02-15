@@ -39,9 +39,8 @@
             </div>
         </div>
     </form>
-
-    @foreach($tasks as $task )
-        <form class="input-group mb-3" method="POST" action='{{ route("dashboard.update", $task->id) }}' id="task-form">
+    <div  class="mt-3" id="tasks-container">
+        <form class="input-group mb-3 task-form" method="POST" action='{{ route("dashboard.update", '') }}' id="new-task" hidden>
             @csrf
             <input type="hidden" name="_method" value="PUT">
             <div class="container">
@@ -49,23 +48,23 @@
                     <div class="col-md-2">
                         <x-text-input id="title" class="form-control"
                                       name="title"
-                                      value="{{ $task->title }}"
+                                      value=""
                                       required/>
                     </div>
 
                     <div class="col-md-8">
                         <x-text-input id="tags" class="form-control"
                                       name="tags_string"
-                                      value="{{ implode(' ', array_column($task->tags()->get()->toArray(), 'title')) }}"
+                                      value=""
                                       required/>
                     </div>
                     <div class="col-md-1">
                         <x-primary-button class="btn btn-warning btn-md active d-block" type="submit">
-                            Edit
+                            Save
                         </x-primary-button>
                     </div>
                     <div class="col-md-1">
-                        <x-primary-button class="btn btn-danger btn-md active d-block" type="button">
+                        <x-primary-button class="btn btn-danger btn-md active d-block" id="deleteButton" type="button" onclick="deleteTask($(this).closest('form'))">
                             X
                         </x-primary-button>
                     </div>
@@ -76,11 +75,55 @@
                         <x-textarea-input id="text"
                                           class="form-control"
                                           name="text">
-                            {{ $task->text }}
+
                         </x-textarea-input>
                     </div>
                 </div>
             </div>
         </form>
-    @endforeach
+        @foreach($tasks as $task)
+            <hr>
+            <form class="input-group mb-3 task-form" method="POST" action='{{ route("dashboard.update", $task->id) }}' id="{{ $task->id }}">
+                @csrf
+                <input type="hidden" name="_method" value="PUT">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <x-text-input id="title" class="form-control"
+                                          name="title"
+                                          value="{{ $task->title }}"
+                                          required/>
+                        </div>
+
+                        <div class="col-md-8">
+                            <x-text-input id="tags" class="form-control"
+                                          name="tags_string"
+                                          value="{{ implode(' ', array_column($task->tags()->get()->toArray(), 'title')) }}"
+                                          required/>
+                        </div>
+                        <div class="col-md-1">
+                            <x-primary-button class="btn btn-warning btn-md active d-block" type="submit">
+                                Save
+                            </x-primary-button>
+                        </div>
+                        <div class="col-md-1">
+                            <x-primary-button class="btn btn-danger btn-md active d-block" type="button" id="deleteButton" onclick="deleteTask($(this).closest('form'))">
+                                X
+                            </x-primary-button>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <x-textarea-input id="text"
+                                              class="form-control"
+                                              name="text">
+                                {{ $task->text }}
+                            </x-textarea-input>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        @endforeach
+    </div>
 </x-app-layout>

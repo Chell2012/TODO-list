@@ -18,8 +18,10 @@
 14) npm run build
 
 2. Запросы для проверки API
+
+
 curl -X POST http://localhost:8000/api/register \                                                                                                   
-     -H "Accept: application/json" \
+     -H "Accept: application/json" \\
      -d '{
            "name": "John Doe",
            "email": "johndoe@example.com",
@@ -28,14 +30,14 @@ curl -X POST http://localhost:8000/api/register \
          }'
 
 curl -X POST http://localhost:8000/api/login \                                                                                                      
-     -H "Accept: application/json" \
+     -H "Accept: application/json" \\
      -d '{
            "email": "johndoe@example.com",
            "password": "1Password" 
          }'
          
 curl -X POST http://localhost:8000/api/dashboard \
-     -H "Accept: application/json" \
+     -H "Accept: application/json" \\
      -d '{
            "title": "John Doe",
            "text": "johndoe@example.com",
@@ -44,7 +46,7 @@ curl -X POST http://localhost:8000/api/dashboard \
          }'
 
 curl -X PUT http://localhost:8000/api/dashboard/8 \
-     -H "Accept: application/json" \
+     -H "Accept: application/json" \\
      -d '{
            "title": "John Doe1",
            "text": "johndoe1@example.com",
@@ -53,5 +55,5 @@ curl -X PUT http://localhost:8000/api/dashboard/8 \
          }'
          
 curl -X DELETE http://localhost:8000/api/dashboard/8 \
-     -H "Accept: application/json"\
+     -H "Accept: application/json"\\
      -d '{"api_token": "your token"}'
