@@ -20,6 +20,7 @@
 2. Запросы для проверки API
 
 
+```bash
 curl -X POST http://localhost:8000/api/register \                                                                                                   
      -H "Accept: application/json" \
      -d '{
